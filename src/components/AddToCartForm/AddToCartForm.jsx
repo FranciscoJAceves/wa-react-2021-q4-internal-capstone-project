@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import { useState } from "react";
 import { useCart } from "../../contexts/CartContext";
 import QuantitySelector from "../QuantitySelector/QuantitySelector";
@@ -8,7 +9,7 @@ import {
   InputLabel,
 } from "./AddToCartForm.styled";
 
-export default function AddToCartForm({ product }) {
+function AddToCartForm({ product }) {
   const [quantity, setQuantity] = useState();
   const { cart, addItem } = useCart();
 
@@ -35,3 +36,14 @@ export default function AddToCartForm({ product }) {
     </AddToCartContainer>
   );
 }
+
+AddToCartForm.propTypes = {
+  product: PropTypes.shape({
+    id: PropTypes.string,
+    data: PropTypes.shape({
+      stock: PropTypes.number,
+    }),
+  }).isRequired,
+};
+
+export default AddToCartForm;

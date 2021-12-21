@@ -51,3 +51,9 @@ export const CheckoutButton = styled(Link)`
   text-align: center;
   padding-top: 13px;
 `;
+
+export const NotFound = styled.span`
+  display: flex;
+  justify-content: center;
+  font-size: 1.875rem;
+`;

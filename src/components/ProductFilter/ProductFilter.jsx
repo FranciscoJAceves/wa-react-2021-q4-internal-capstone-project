@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import React from "react";
 import { useLocation } from "react-router";
 import { NAVIGATION } from "../../utils/constants";
@@ -12,13 +13,13 @@ import {
   ProductFilterSidebar,
 } from "./ProductFilter.styled";
 
-export default function ProductFilter({ categories, products }) {
+function ProductFilter({ categories, products }) {
   const { filter = [] } = useLocation().state || {};
   const clearFilters = { id: "-", data: { name: "Clear Filters" } };
 
   let filterButtons;
   if (!categories.isLoading) {
-    let categoriesArray =
+    const categoriesArray =
       filter.length > 0
         ? [clearFilters, ...categories.data.results]
         : [...categories.data.results];
@@ -93,3 +94,33 @@ export default function ProductFilter({ categories, products }) {
     </>
   );
 }
+
+ProductFilter.propTypes = {
+  categories: PropTypes.shape({
+    isLoading: PropTypes.bool,
+    data: PropTypes.shape({
+      results: PropTypes.arrayOf(
+        PropTypes.shape({
+          id: PropTypes.string,
+          data: PropTypes.shape({ name: PropTypes.string }),
+        })
+      ),
+    }),
+  }).isRequired,
+  products: PropTypes.shape({
+    isLoading: PropTypes.bool,
+    data: PropTypes.shape({
+      total_pages: PropTypes.number,
+      results: PropTypes.arrayOf(
+        PropTypes.shape({
+          id: PropTypes.string,
+          data: PropTypes.shape({
+            category: PropTypes.shape({ id: PropTypes.string }),
+          }),
+        })
+      ),
+    }),
+  }).isRequired,
+};
+
+export default ProductFilter;

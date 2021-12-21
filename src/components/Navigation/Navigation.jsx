@@ -1,4 +1,5 @@
 import { useLocation } from "react-router";
+import { useState } from "react";
 import { NAVIGATION } from "../../utils/constants";
 import {
   Header,
@@ -12,7 +13,6 @@ import {
 import LogoSVG from "../../images/logo.svg";
 import SearchSVG from "../../images/search.svg";
 import UserSVG from "../../images/user.svg";
-import { useState } from "react";
 import CartIcon from "../CartIcon";
 
 export default function Navigation() {

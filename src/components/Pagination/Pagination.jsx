@@ -1,11 +1,12 @@
+import PropTypes from "prop-types";
 import { useLocation } from "react-router";
 import { PaginationButton, PaginationContainer } from "./Pagination.styled";
 
-export default function Pagination({ navigation, totalPages, options = {} }) {
+function Pagination({ navigation, totalPages, options = {} }) {
   const { page: currentPage = 1 } = useLocation().state || {};
 
-  let pageButtons = [];
-  for (let page = 1; page <= totalPages; page++) {
+  const pageButtons = [];
+  for (let page = 1; page <= totalPages; page += 1) {
     pageButtons.push(
       <PaginationButton
         key={page}
@@ -51,3 +52,15 @@ export default function Pagination({ navigation, totalPages, options = {} }) {
     </PaginationContainer>
   );
 }
+
+Pagination.propTypes = {
+  navigation: PropTypes.string.isRequired,
+  totalPages: PropTypes.number.isRequired,
+  options: PropTypes.shape(),
+};
+
+Pagination.defaultProps = {
+  options: {},
+};
+
+export default Pagination;

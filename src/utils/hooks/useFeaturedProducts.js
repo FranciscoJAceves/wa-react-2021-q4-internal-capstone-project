@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import { API_BASE_URL } from "../constants";
-import { useLatestAPI } from "./useLatestAPI";
+import useLatestAPI from "./useLatestAPI";
 
-export function useFeaturedProducts() {
+export default function useFeaturedProducts() {
   const { ref: apiRef, isLoading: isApiMetadataLoading } = useLatestAPI();
   const [featuredProducts, setFeaturedProducts] = useState(() => ({
     data: {},
@@ -35,7 +35,6 @@ export function useFeaturedProducts() {
         setFeaturedProducts({ data, isLoading: false });
       } catch (err) {
         setFeaturedProducts({ data: {}, isLoading: false });
-        console.error(err);
       }
     }
 

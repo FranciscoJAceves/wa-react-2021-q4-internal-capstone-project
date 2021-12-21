@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import { useState } from "react";
 import { NAVIGATION } from "../../utils/constants";
 import Grid from "../Grid";
@@ -12,11 +13,11 @@ import {
 
 const ALL_CATEGORY_ID = "*";
 
-export default function FeaturedProducts({
+function FeaturedProducts({
   title,
   categories,
   products,
-  firstActiveCategoryId = ALL_CATEGORY_ID,
+  firstActiveCategoryId,
 }) {
   const [activeCategoryId, setActiveCategoryId] = useState(
     firstActiveCategoryId
@@ -27,17 +28,15 @@ export default function FeaturedProducts({
     ...categories,
   ];
 
-  const categoryControls = categoryControlList.map(({ id, name }) => {
-    return (
-      <FeaturedProductsOption
-        key={id}
-        onClick={() => setActiveCategoryId(id)}
-        active={id === activeCategoryId}
-      >
-        {name}
-      </FeaturedProductsOption>
-    );
-  });
+  const categoryControls = categoryControlList.map(({ id, name }) => (
+    <FeaturedProductsOption
+      key={id}
+      onClick={() => setActiveCategoryId(id)}
+      active={id === activeCategoryId}
+    >
+      {name}
+    </FeaturedProductsOption>
+  ));
 
   let categoryNames = {};
   categories.forEach(({ id, name }) => {
@@ -69,3 +68,34 @@ export default function FeaturedProducts({
     </FeaturedProductsContainer>
   );
 }
+
+FeaturedProducts.propTypes = {
+  title: PropTypes.string.isRequired,
+  categories: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string,
+      name: PropTypes.string,
+    })
+  ).isRequired,
+  products: PropTypes.shape({
+    data: PropTypes.shape({
+      results: PropTypes.arrayOf(
+        PropTypes.shape({
+          id: PropTypes.string,
+          data: PropTypes.shape({
+            category: PropTypes.shape({
+              id: PropTypes.string,
+            }),
+          }),
+        })
+      ),
+    }),
+  }).isRequired,
+  firstActiveCategoryId: PropTypes.string,
+};
+
+FeaturedProducts.defaultProps = {
+  firstActiveCategoryId: ALL_CATEGORY_ID,
+};
+
+export default FeaturedProducts;

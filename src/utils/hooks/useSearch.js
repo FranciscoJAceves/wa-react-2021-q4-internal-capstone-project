@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import { API_BASE_URL } from "../constants";
-import { useLatestAPI } from "./useLatestAPI";
+import useLatestAPI from "./useLatestAPI";
 
-export function useSearch(page, searchTerm) {
+export default function useSearch(page, searchTerm) {
   const { ref: apiRef, isLoading: isApiMetadataLoading } = useLatestAPI();
   const [search, setSearch] = useState(() => ({
     data: {},
@@ -35,7 +35,6 @@ export function useSearch(page, searchTerm) {
         setSearch({ data, isLoading: false });
       } catch (err) {
         setSearch({ data: {}, isLoading: false });
-        console.error(err);
       }
     }
 

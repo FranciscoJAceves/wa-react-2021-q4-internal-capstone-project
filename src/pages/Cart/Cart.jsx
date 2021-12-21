@@ -6,6 +6,7 @@ import {
   CartContainer,
   CheckoutButton,
   CheckoutSection,
+  NotFound,
   RemoveButton,
   Thumbnail,
   TotalLabel,
@@ -25,39 +26,57 @@ export default function Cart() {
     }
   }
 
-  const cartArray = cart.map(({ item: { id, data }, quantity }) => [
-    <Thumbnail src={data.mainimage.url} alt={data.name} />,
-    data.name,
-    PRICE_FORMATTER.format(data.price),
-    <QuantitySelector
-      defaultValue={quantity}
-      minValue={1}
-      maxValue={data.stock}
-      onChange={(newValue) => handleQuantityChange(id, newValue)}
-      dark
-    />,
-    PRICE_FORMATTER.format(data.price * quantity),
-    <RemoveButton onClick={() => removeItem(id, quantity)}>X</RemoveButton>,
-  ]);
+  const cartArray = cart.map(({ item: { id, data }, quantity }) => ({
+    rowID: id,
+    cellIDs: [
+      `image${id}`,
+      `name${id}`,
+      `price${id}`,
+      `quantity${id}`,
+      `subtotal${id}`,
+      `remove${id}`,
+    ],
+    data: [
+      <Thumbnail src={data.mainimage.url} alt={data.name} />,
+      data.name,
+      PRICE_FORMATTER.format(data.price),
+      <QuantitySelector
+        defaultValue={quantity}
+        minValue={1}
+        maxValue={data.stock}
+        onChange={(newValue) => handleQuantityChange(id, newValue)}
+        dark
+      />,
+      PRICE_FORMATTER.format(data.price * quantity),
+      <RemoveButton onClick={() => removeItem(id, quantity)}>X</RemoveButton>,
+    ],
+  }));
 
-  const totalPrice = cart.reduce((previous, current) => {
-    return previous + current.item.data.price * current.quantity;
-  }, 0);
+  const totalPrice = cart.reduce(
+    (previous, current) =>
+      previous + current.item.data.price * current.quantity,
+    0
+  );
 
   return (
     <CartContainer>
-      <Table
-        header={["Image", "Name", "Price", "Quantity", "Subtotal", ""]}
-        data={cartArray}
-      />
-      {cart.length > 0 && (
-        <CheckoutSection>
-          <TotalLabel>Total:</TotalLabel>
-          <TotalPrice>{PRICE_FORMATTER.format(totalPrice)}</TotalPrice>
-          <CheckoutButton to={NAVIGATION.CHECKOUT}>
-            Go to Checkout
-          </CheckoutButton>
-        </CheckoutSection>
+      {cart.length === 0 ? (
+        <NotFound>The Cart is Empty</NotFound>
+      ) : (
+        <>
+          <Table
+            header={["Image", "Name", "Price", "Quantity", "Subtotal", ""]}
+            content={cartArray}
+          />
+
+          <CheckoutSection>
+            <TotalLabel>Total:</TotalLabel>
+            <TotalPrice>{PRICE_FORMATTER.format(totalPrice)}</TotalPrice>
+            <CheckoutButton to={NAVIGATION.CHECKOUT}>
+              Go to Checkout
+            </CheckoutButton>
+          </CheckoutSection>
+        </>
       )}
     </CartContainer>
   );

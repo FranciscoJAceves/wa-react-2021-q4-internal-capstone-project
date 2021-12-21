@@ -9,7 +9,7 @@ import {
 const CartContext = createContext();
 
 function cartReducer(state, action) {
-  const payload = action.payload;
+  const { payload } = action;
   const itemIndex = state.findIndex(({ item }) => item?.id === payload.item.id);
 
   switch (action.type) {
@@ -21,31 +21,32 @@ function cartReducer(state, action) {
             : payload.quantity;
 
         return [...state, payload];
-      } else {
-        return state.map(({ item, quantity }) =>
-          item.id === payload.item.id
-            ? {
-                item,
-                quantity:
-                  quantity + payload.quantity > item.data.stock
-                    ? item.data.stock
-                    : quantity + payload.quantity,
-              }
-            : { item, quantity }
-        );
       }
+      return state.map(({ item, quantity }) =>
+        item.id === payload.item.id
+          ? {
+              item,
+              quantity:
+                quantity + payload.quantity > item.data.stock
+                  ? item.data.stock
+                  : quantity + payload.quantity,
+            }
+          : { item, quantity }
+      );
+
     case "remove":
       if (itemIndex < 0) {
         return state;
-      } else if (state[itemIndex].quantity - payload.quantity > 0) {
+      }
+      if (state[itemIndex].quantity - payload.quantity > 0) {
         return state.map(({ item, quantity }) =>
           item.id === payload.item.id
             ? { item, quantity: quantity - payload.quantity }
             : { item, quantity }
         );
-      } else {
-        return [...state.slice(0, itemIndex), ...state.slice(itemIndex + 1)];
       }
+      return [...state.slice(0, itemIndex), ...state.slice(itemIndex + 1)];
+
     default:
       throw new Error(`Unhandled action type: ${action.type}`);
   }

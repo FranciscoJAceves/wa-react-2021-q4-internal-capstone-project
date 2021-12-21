@@ -2,9 +2,9 @@ import Banner from "../../components/Banner";
 import FeaturedProducts from "../../components/FeaturedProducts";
 import Loading from "../../components/Loading";
 import Slider from "../../components/Slider";
-import { useCategories } from "../../utils/hooks/useCategories";
-import { useFeaturedBanners } from "../../utils/hooks/useFeaturedBanners";
-import { useFeaturedProducts } from "../../utils/hooks/useFeaturedProducts";
+import useCategories from "../../utils/hooks/useCategories";
+import useFeaturedBanners from "../../utils/hooks/useFeaturedBanners";
+import useFeaturedProducts from "../../utils/hooks/useFeaturedProducts";
 
 export default function Home() {
   const bannerData = useFeaturedBanners();
@@ -13,13 +13,16 @@ export default function Home() {
 
   const bannerList = bannerData.isLoading
     ? []
-    : bannerData.data.results.map(({ data }) => (
-        <Banner
-          title={data.title}
-          text={data.description[0].text}
-          image={data.main_image.url}
-        />
-      ));
+    : bannerData.data.results.map(({ id, data }) => ({
+        id,
+        content: (
+          <Banner
+            title={data.title}
+            text={data.description[0].text}
+            image={data.main_image.url}
+          />
+        ),
+      }));
 
   const categories = categoriesData.isLoading
     ? []

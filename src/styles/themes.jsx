@@ -1,4 +1,4 @@
-export const defaultTheme = {
+const defaultTheme = {
   accent: "#F14F1B",
   accentWeak: "#F57B54",
   light: "#FFF",
@@ -8,3 +8,5 @@ export const defaultTheme = {
   disabled: "#999",
   transition: "all 0.3s ease 0s",
 };
+
+export default defaultTheme;

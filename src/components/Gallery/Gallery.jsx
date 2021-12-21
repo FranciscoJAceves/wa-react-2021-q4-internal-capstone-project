@@ -1,14 +1,15 @@
 import { useState } from "react";
-import { SwiperSlide } from "swiper/react/swiper-react.js";
+import PropTypes from "prop-types";
+import { SwiperSlide } from "swiper/react/swiper-react";
+import SwiperCore, { FreeMode, Navigation, Thumbs } from "swiper";
 import { GalleryContainer, SwiperMain, SwiperSelector } from "./Gallery.styled";
 import "swiper/swiper.min.css";
 import "swiper/modules/navigation/navigation.min.css";
 import "swiper/modules/thumbs/thumbs.min.css";
 
-import SwiperCore, { FreeMode, Navigation, Thumbs } from "swiper";
 SwiperCore.use([FreeMode, Navigation, Thumbs]);
 
-export default function Gallery({ images }) {
+function Gallery({ images }) {
   const slides = images.map(({ alt, image: { url } }) => (
     <SwiperSlide key={url}>
       <img src={url} alt={alt} />
@@ -39,3 +40,14 @@ export default function Gallery({ images }) {
     </GalleryContainer>
   );
 }
+
+Gallery.propTypes = {
+  images: PropTypes.arrayOf(
+    PropTypes.shape({
+      alt: PropTypes.string,
+      image: PropTypes.shape({ url: PropTypes.string }),
+    })
+  ).isRequired,
+};
+
+export default Gallery;

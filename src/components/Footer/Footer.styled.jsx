@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const FooterContainer = styled.footer`
+const FooterContainer = styled.footer`
   grid-column: 1 / span 6;
   display: flex;
   align-items: flex-end;
@@ -15,3 +15,5 @@ export const FooterContainer = styled.footer`
     margin: 0 10px 5px 0;
   }
 `;
+
+export default FooterContainer;

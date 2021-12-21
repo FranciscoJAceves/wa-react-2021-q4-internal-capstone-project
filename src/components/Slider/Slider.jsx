@@ -1,37 +1,39 @@
-import { useEffect, useState } from "react";
+import PropTypes from "prop-types";
+import { useCallback, useEffect, useState } from "react";
 import { SliderButton, SliderControls } from "./Slider.styled";
 
-export default function Slider({
-  contentList,
-  autoPlaySeconds = 0,
-  startFrom = 0,
-}) {
+function Slider({ contentList, autoPlaySeconds, startFrom }) {
   const [active, setActive] = useState(startFrom);
+
+  const nextSlide = useCallback(() => {
+    setActive((currentActive) =>
+      currentActive + 1 === contentList.length ? 0 : currentActive + 1
+    );
+  }, [contentList]);
+
+  const previousSlide = useCallback(() => {
+    setActive((currentActive) =>
+      currentActive - 1 < 0 ? contentList.length - 1 : currentActive - 1
+    );
+  }, [contentList]);
 
   useEffect(() => {
     if (autoPlaySeconds > 0) {
-      let timerId = setInterval(nextSlide, autoPlaySeconds);
+      const timerId = setInterval(nextSlide, autoPlaySeconds);
       return () => clearInterval(timerId);
     }
+    return undefined;
   });
 
-  function nextSlide() {
-    setActive(active + 1 === contentList.length ? 0 : active + 1);
-  }
-
-  function previousSlide() {
-    setActive(active - 1 < 0 ? contentList.length - 1 : active - 1);
-  }
-
-  const sliderMarks = contentList.map((_, index) => (
-    <SliderButton onClick={() => setActive(index)} key={`mark${index}`}>
+  const sliderMarks = contentList.map(({ id }, index) => (
+    <SliderButton onClick={() => setActive(index)} key={id}>
       {active === index ? "●" : "○"}
     </SliderButton>
   ));
 
   return (
     <>
-      {contentList[active]}
+      {contentList[active].content}
       <SliderControls>
         <SliderButton onClick={previousSlide}>{"<"}</SliderButton>
         {sliderMarks}
@@ -40,3 +42,15 @@ export default function Slider({
     </>
   );
 }
+
+Slider.propTypes = {
+  contentList: PropTypes.arrayOf(
+    PropTypes.shape({ id: PropTypes.string, content: PropTypes.node })
+  ).isRequired,
+  autoPlaySeconds: PropTypes.number,
+  startFrom: PropTypes.number,
+};
+
+Slider.defaultProps = { autoPlaySeconds: 0, startFrom: 0 };
+
+export default Slider;

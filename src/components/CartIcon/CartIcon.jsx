@@ -1,6 +1,6 @@
 import { useCart } from "../../contexts/CartContext";
 import CartSVG from "../../images/cart.svg";
-import { CartIconContainer } from "./CartIcon.styled";
+import CartIconContainer from "./CartIcon.styled";
 
 export default function CartIcon() {
   const { cart } = useCart();

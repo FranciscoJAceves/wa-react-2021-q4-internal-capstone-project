@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Swiper } from "swiper/react/swiper-react.js";
+import { Swiper } from "swiper/react/swiper-react";
 
 export const GalleryContainer = styled.div`
   .swiper-slide img {

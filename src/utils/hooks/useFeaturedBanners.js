@@ -1,8 +1,8 @@
-import { useState, useEffect } from 'react';
-import { API_BASE_URL } from '../constants';
-import { useLatestAPI } from './useLatestAPI';
+import { useState, useEffect } from "react";
+import { API_BASE_URL } from "../constants";
+import useLatestAPI from "./useLatestAPI";
 
-export function useFeaturedBanners() {
+export default function useFeaturedBanners() {
   const { ref: apiRef, isLoading: isApiMetadataLoading } = useLatestAPI();
   const [featuredBanners, setFeaturedBanners] = useState(() => ({
     data: {},
@@ -33,7 +33,6 @@ export function useFeaturedBanners() {
         setFeaturedBanners({ data, isLoading: false });
       } catch (err) {
         setFeaturedBanners({ data: {}, isLoading: false });
-        console.error(err);
       }
     }
 

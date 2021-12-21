@@ -1,14 +1,15 @@
+import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { Button, Container, Controls, Input } from "./QuantitySelector.styled";
 
-export default function QuantitySelector({
-  defaultValue = 1,
-  minValue = 1,
-  maxValue = Infinity,
-  onChange = () => {},
-  dark = false,
-  inputName = "quantity_input",
-  inputID = "quantity_input",
+function QuantitySelector({
+  defaultValue,
+  minValue,
+  maxValue,
+  onChange,
+  dark,
+  inputName,
+  inputID,
 }) {
   const [quantity, setQuantity] = useState(defaultValue);
 
@@ -16,9 +17,9 @@ export default function QuantitySelector({
     onChange(defaultValue);
   }, [onChange, defaultValue]);
 
-  function changeQuantity(newValue) {
-    newValue = parseInt(newValue);
-    if (isNaN(newValue)) {
+  function changeQuantity(value) {
+    let newValue = parseInt(value, 10);
+    if (Number.isNaN(newValue)) {
       newValue = quantity;
     } else if (newValue > maxValue) {
       newValue = maxValue;
@@ -51,3 +52,25 @@ export default function QuantitySelector({
     </Container>
   );
 }
+
+QuantitySelector.propTypes = {
+  defaultValue: PropTypes.number,
+  minValue: PropTypes.number,
+  maxValue: PropTypes.number,
+  onChange: PropTypes.func,
+  dark: PropTypes.bool,
+  inputName: PropTypes.string,
+  inputID: PropTypes.string,
+};
+
+QuantitySelector.defaultProps = {
+  defaultValue: 1,
+  minValue: 1,
+  maxValue: Infinity,
+  onChange: () => {},
+  dark: false,
+  inputName: "quantity_input",
+  inputID: "quantity_input",
+};
+
+export default QuantitySelector;

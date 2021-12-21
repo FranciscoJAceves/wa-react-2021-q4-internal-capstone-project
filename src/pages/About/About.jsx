@@ -8,7 +8,7 @@ export default function About() {
         color: "red",
       }}
     >
-      This page doesn't exist yet.
+      This page doesn&apos;t exist yet.
     </h1>
   );
 }

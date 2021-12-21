@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import { useCart } from "../../contexts/CartContext";
 import { NAVIGATION, PRICE_FORMATTER } from "../../utils/constants";
 import {
@@ -12,7 +13,7 @@ import {
   ContentRight,
 } from "./ProductCard.styled";
 
-export default function ProductCard({ product, category, large = false }) {
+function ProductCard({ product, category, large }) {
   const { cart, addItem } = useCart();
   const { id, data } = product;
 
@@ -38,3 +39,25 @@ export default function ProductCard({ product, category, large = false }) {
     </div>
   );
 }
+
+ProductCard.propTypes = {
+  product: PropTypes.shape({
+    id: PropTypes.string,
+    data: PropTypes.shape({
+      mainimage: PropTypes.shape({
+        url: PropTypes.string,
+      }),
+      name: PropTypes.string,
+      price: PropTypes.number,
+      short_description: PropTypes.string,
+    }),
+  }).isRequired,
+  category: PropTypes.string.isRequired,
+  large: PropTypes.bool,
+};
+
+ProductCard.defaultProps = {
+  large: false,
+};
+
+export default ProductCard;

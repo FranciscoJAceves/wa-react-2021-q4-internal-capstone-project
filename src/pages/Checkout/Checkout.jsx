@@ -18,22 +18,24 @@ export default function Checkout() {
 
   function handleSubmit(e) {
     e.preventDefault();
-    const inputs = e.target.elements;
-    console.log(`Name: ${inputs.name.value}`);
-    console.log(`Email: ${inputs.email.value}`);
-    console.log(`ZIP Code: ${inputs.zipcode.value}`);
-    console.log(`Notes: ${inputs.notes.value}`);
+    // This would be used to handle the Checkout
   }
 
-  const cartSummary = cart.map(({ item, quantity }) => [
-    item.data.name,
-    `x${quantity}`,
-    PRICE_FORMATTER.format(item.data.price * quantity),
-  ]);
+  const cartSummary = cart.map(({ item, quantity }) => ({
+    rowID: item.id,
+    cellIDs: [`name${item.id}`, `quantity${item.id}`, `price${item.id}`],
+    data: [
+      item.data.name,
+      `x${quantity}`,
+      PRICE_FORMATTER.format(item.data.price * quantity),
+    ],
+  }));
 
-  const totalPrice = cart.reduce((previous, current) => {
-    return previous + current.item.data.price * current.quantity;
-  }, 0);
+  const totalPrice = cart.reduce(
+    (previous, current) =>
+      previous + current.item.data.price * current.quantity,
+    0
+  );
 
   return (
     <Container>
@@ -69,17 +71,12 @@ export default function Checkout() {
                 <label htmlFor="notes">Notes</label>
               </td>
               <td>
-                <textarea
-                  name="notes"
-                  id="notes"
-                  cols="30"
-                  rows="10"
-                ></textarea>
+                <textarea name="notes" id="notes" cols="30" rows="10" />
               </td>
             </tr>
           </tbody>
         </TableForm>
-        <Table data={cartSummary} />
+        <Table content={cartSummary} />
         <TotalSection>
           <TotalLabel>Total:</TotalLabel>
           <TotalPrice>{PRICE_FORMATTER.format(totalPrice)}</TotalPrice>

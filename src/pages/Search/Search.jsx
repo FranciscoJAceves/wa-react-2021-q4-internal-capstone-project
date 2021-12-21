@@ -3,8 +3,8 @@ import Grid from "../../components/Grid";
 import Loading from "../../components/Loading/Loading";
 import Pagination from "../../components/Pagination/Pagination";
 import ProductCard from "../../components/ProductCard";
-import { useCategories } from "../../utils/hooks/useCategories";
-import { useSearch } from "../../utils/hooks/useSearch";
+import useCategories from "../../utils/hooks/useCategories";
+import useSearch from "../../utils/hooks/useSearch";
 import { NotFound, SearchResults } from "./Search.styled";
 
 export default function Search() {
@@ -14,14 +14,14 @@ export default function Search() {
   const categoriesData = useCategories();
   const productData = useSearch(page, searchParams.get("q") || "");
 
-  let productsList;
+  let searchResults;
   if (!categoriesData.isLoading && !productData.isLoading) {
     let categoryNames = {};
     categoriesData.data.results.forEach(({ id, data: { name } }) => {
       categoryNames = { ...categoryNames, [id]: name };
     });
 
-    productsList = productData.data.results.map((product) => (
+    const productsList = productData.data.results.map((product) => (
       <ProductCard
         key={product.id}
         product={product}
@@ -29,27 +29,24 @@ export default function Search() {
         large
       />
     ));
+
+    searchResults =
+      productsList.length === 0 ? (
+        <NotFound>Nothing was Found :(</NotFound>
+      ) : (
+        <SearchResults>
+          <Grid>{productsList}</Grid>
+          <Pagination
+            navigation={`${pathname}${search}`}
+            totalPages={productData.data.total_pages}
+          />
+        </SearchResults>
+      );
   }
 
-  return (
-    <>
-      {categoriesData.isLoading || productData.isLoading ? (
-        <Loading />
-      ) : (
-        <>
-          {productsList.length === 0 ? (
-            <NotFound>Nothing was Found :(</NotFound>
-          ) : (
-            <SearchResults>
-              <Grid>{productsList}</Grid>
-              <Pagination
-                navigation={`${pathname}${search}`}
-                totalPages={productData.data.total_pages}
-              />
-            </SearchResults>
-          )}
-        </>
-      )}
-    </>
+  return categoriesData.isLoading || productData.isLoading ? (
+    <Loading />
+  ) : (
+    searchResults
   );
 }

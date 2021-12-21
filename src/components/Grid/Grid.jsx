@@ -1,5 +1,12 @@
-import { GridContainer } from "./Grid.styled";
+import PropTypes from "prop-types";
+import GridContainer from "./Grid.styled";
 
-export default function Grid({ children }) {
+function Grid({ children }) {
   return <GridContainer>{children}</GridContainer>;
 }
+
+Grid.propTypes = {
+  children: PropTypes.node.isRequired,
+};
+
+export default Grid;

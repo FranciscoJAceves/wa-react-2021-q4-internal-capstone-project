@@ -1,20 +1,23 @@
+import PropTypes from "prop-types";
 import { AccentRow, TableContainer } from "./Table.styled";
 
-export default function Table({ header = [], data }) {
+function Table({ header, content }) {
   const headerCells = (
     <tr>
-      {header.map((name, index) => (
-        <th key={index}>{name}</th>
+      {header.map((name) => (
+        <th key={name}>{name}</th>
       ))}
     </tr>
   );
 
-  const rows = data.map((row, index) => {
-    const cells = row.map((value, index) => <td key={index}>{value}</td>);
-    return index % 2 === 0 ? (
-      <tr key={index}>{cells}</tr>
+  const rows = content.map(({ rowID, cellIDs, data }, rowIndex) => {
+    const cells = data.map((value, cellIndex) => (
+      <td key={cellIDs[cellIndex]}>{value}</td>
+    ));
+    return rowIndex % 2 === 0 ? (
+      <tr key={rowID}>{cells}</tr>
     ) : (
-      <AccentRow key={index}>{cells}</AccentRow>
+      <AccentRow key={rowID}>{cells}</AccentRow>
     );
   });
 
@@ -25,3 +28,20 @@ export default function Table({ header = [], data }) {
     </TableContainer>
   );
 }
+
+Table.propTypes = {
+  header: PropTypes.arrayOf(PropTypes.node),
+  content: PropTypes.arrayOf(
+    PropTypes.shape({
+      rowId: PropTypes.string,
+      cellIDs: PropTypes.arrayOf(PropTypes.string),
+      data: PropTypes.arrayOf(PropTypes.node),
+    })
+  ).isRequired,
+};
+
+Table.defaultProps = {
+  header: [],
+};
+
+export default Table;

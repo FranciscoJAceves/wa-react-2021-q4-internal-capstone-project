@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const CartIconContainer = styled.div`
+const CartIconContainer = styled.div`
   position: relative;
 
   img {
@@ -23,3 +23,5 @@ export const CartIconContainer = styled.div`
     border-radius: 100%;
   }
 `;
+
+export default CartIconContainer;
